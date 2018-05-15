@@ -2,10 +2,27 @@
 SOURCES=Main.cpp
 
 
-INCLUDE_DIR="/3rd/SDL2/i686-w64-mingw32/include"
+INCLUDE_DIR= \
+  -I "./3rd/SDL2/i686-w64-mingw32/include" \
+  -I "./3rd/GLEW/include"
 
-LIB_DIR="/3rd/SDL2/i686-w64-mingw32/lib"
+LIB_DIR= \
+  -L "./3rd/SDL2/i686-w64-mingw32/lib" \
+  -L "./3rd/GLEW/lib/Release/Win32"
 
-ALL:
-	g++ $(SOURCES) -I $(INCLUDE_DIR) -L $(LIB_DIR) -lmingw32 -lSDL2main -lSDL2 -lopengl32 -fpermissive
+LIBS = \
+  -lmingw32 \
+  -lSDL2main \
+  -lSDL2 \
+  -lglu32 \
+  -lglew32s \
+  -lopengl32
+
+FLAGS = \
+  -fpermissive
+
+all: build
 	a.exe
+
+build:
+	g++ $(SOURCES) $(INCLUDE_DIR) $(LIB_DIR) $(LIBS) $(FLAGS)

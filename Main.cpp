@@ -10,6 +10,8 @@
 #include <string>
 #include <windows.h>
 
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -20,6 +22,91 @@ SDL_Window     *g_Window;
 SDL_GLContext  *g_GLContext;
 bool            g_Running = false;
 
+GLuint  g_ShaderProgramID = 0;
+GLint   g_VertexPos2DLoc = -1;
+GLuint  g_VertexBufferObj = 0;
+GLuint  g_IndexBufferObj = 0;
+
+
+void InitShaders()
+{
+    std::cout << "initializing shaders" << std::endl;
+
+    g_ShaderProgramID = glCreateProgram();
+
+    ///
+    // VertexShader
+    ///
+
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const GLchar* vertexShaderSource[] =
+    {
+        "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
+    };
+
+    glShaderSource(vertexShader, 1, vertexShaderSource, NULL);
+
+    glCompileShader(vertexShader);
+
+    GLint vsCompileResult = GL_FALSE;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vsCompileResult);
+    if (vsCompileResult != GL_TRUE)
+    {
+        std::cout << "couldn't compile vertex shader" << std::endl;
+        exit(0);
+    }
+
+    // attach
+
+    glAttachShader(g_ShaderProgramID, vertexShader);
+
+
+    ///
+    // Fragment Shader
+    ///
+
+    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const GLchar* fragShaderSource[] =
+    {
+        "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 0.5, 0.5, 0.5, 1.0 ); }"
+    };
+
+    glShaderSource(fragShader, 1, fragShaderSource, NULL);
+
+    glCompileShader(fragShader);
+
+    GLint fsCompileResult = GL_FALSE;
+    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &fsCompileResult);
+    if (fsCompileResult != GL_TRUE)
+    {
+        std::cout << "couldn't compile fragment shader" << std::endl;
+        exit(0);
+    }
+
+    // attach
+    glAttachShader(g_ShaderProgramID, fragShader);
+
+
+    ///
+    // Linking
+    ///
+
+    glLinkProgram(g_ShaderProgramID);
+    GLint linkingResult = GL_FALSE;
+    glGetShaderiv(g_ShaderProgramID, GL_LINK_STATUS, &linkingResult);
+    if (fsCompileResult != GL_TRUE)
+    {
+        std::cout << "couldn't link shader" << std::endl;
+        exit(0);
+    }
+
+    g_VertexPos2DLoc = glGetAttribLocation(g_ShaderProgramID, "LVertexPos2D");
+    if (g_VertexPos2DLoc == -1)
+    {
+        std::cout << "bad variable name" << std::endl;
+        exit(0);
+    }
+}
 
 // sdl, gl, window initialization
 void Initialize(std::string windowTitle)
@@ -31,8 +118,8 @@ void Initialize(std::string windowTitle)
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
@@ -49,7 +136,25 @@ void Initialize(std::string windowTitle)
     std::cout << "Window created!\n";
 
     g_GLContext = SDL_GL_CreateContext(g_Window);
+
+    if (g_GLContext == NULL)
+    {
+        std::cout << "cannot create GL Context." << std::endl;
+        exit(0);
+    }
+
+    // optional????
     SDL_GL_SetSwapInterval(1);
+
+    GLenum glewError = glewInit();
+
+    if (glewError != GLEW_OK)
+    {
+        std::cout << "glew error\n";
+        exit(0);
+    }
+
+    InitShaders();
 }
 
 
@@ -87,10 +192,60 @@ void HandleInput(SDL_Event *event)
 }
 
 
+void LoadResources()
+{
+    //Initialize clear color
+    glClearColor(0.f, 0.f, 0.f, 1.f);
+
+    //VBO data
+    GLfloat vertexData[] =
+    {
+        -0.5f, -0.5f,
+        0.5f, -0.5f,
+        0.5f,  0.5f,
+        -0.5f,  0.5f
+    };
+
+    //IBO data
+    GLuint indexData[] = { 0, 1, 2, 3 };
+
+    //Create VBO
+    glGenBuffers(1, &g_VertexBufferObj);
+    glBindBuffer(GL_ARRAY_BUFFER, g_VertexBufferObj);
+    glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
+
+    //Create IBO
+    glGenBuffers(1, &g_IndexBufferObj);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_IndexBufferObj);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW);
+}
+
+
 void Render()
 {
-    glClearColor ( 0.7, 0.7, 0.7, 1.0 );
-    glClear ( GL_COLOR_BUFFER_BIT );
+    //glClearColor ( 0.7, 0.7, 0.7, 1.0 );
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    //Bind program
+    glUseProgram(g_ShaderProgramID);
+
+    //Enable vertex position
+    glEnableVertexAttribArray(g_VertexPos2DLoc);
+
+    //Set vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, g_VertexBufferObj);
+    glVertexAttribPointer(g_VertexPos2DLoc, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+
+    //Set index data and render
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_IndexBufferObj);
+    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+
+    //Disable vertex position
+    glDisableVertexAttribArray(g_VertexPos2DLoc);
+
+    //Unbind program
+    glUseProgram(NULL);
+
     SDL_GL_SwapWindow(g_Window);
 }
 
@@ -100,6 +255,8 @@ int main(int argc, char **argv)
 {
     // Initialize window, SDL, GL
     Initialize("Joguin");
+
+    LoadResources();
 
     SDL_Event event;
     g_Running = true;
