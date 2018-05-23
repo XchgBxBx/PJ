@@ -19,14 +19,15 @@
 #define SCREEN_HEIGHT 600
 
 SDL_Window     *g_Window;
-SDL_GLContext  *g_GLContext;
+SDL_GLContext   g_GLContext;
 bool            g_Running = false;
 
 GLuint  g_ShaderProgramID = 0;
 GLint   g_VertexPos2DLoc = -1;
-GLuint  g_VertexBufferObj = 0;
-GLuint  g_IndexBufferObj = 0;
 
+#include "Game/Quad.h"
+
+Quad quad;
 
 void InitShaders()
 {
@@ -197,27 +198,7 @@ void LoadResources()
     //Initialize clear color
     glClearColor(0.f, 0.f, 0.f, 1.f);
 
-    //VBO data
-    GLfloat vertexData[] =
-    {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f,  0.5f,
-        -0.5f,  0.5f
-    };
-
-    //IBO data
-    GLuint indexData[] = { 0, 1, 2, 3 };
-
-    //Create VBO
-    glGenBuffers(1, &g_VertexBufferObj);
-    glBindBuffer(GL_ARRAY_BUFFER, g_VertexBufferObj);
-    glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
-
-    //Create IBO
-    glGenBuffers(1, &g_IndexBufferObj);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_IndexBufferObj);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW);
+    quad.LoadResources();
 }
 
 
@@ -232,13 +213,7 @@ void Render()
     //Enable vertex position
     glEnableVertexAttribArray(g_VertexPos2DLoc);
 
-    //Set vertex data
-    glBindBuffer(GL_ARRAY_BUFFER, g_VertexBufferObj);
-    glVertexAttribPointer(g_VertexPos2DLoc, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
-
-    //Set index data and render
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_IndexBufferObj);
-    glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
+        quad.Render(g_VertexPos2DLoc);
 
     //Disable vertex position
     glDisableVertexAttribArray(g_VertexPos2DLoc);

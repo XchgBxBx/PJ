@@ -1,5 +1,10 @@
 
-SOURCES=Main.cpp
+SOURCES= \
+  Node.cpp \
+  \
+  Game/Quad.cpp \
+  \
+  Main.cpp
 
 
 INCLUDE_DIR= \
