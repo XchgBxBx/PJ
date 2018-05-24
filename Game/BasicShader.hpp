@@ -8,16 +8,16 @@
 
 #include "../Shader.h"
 
-class BasicShader
+class BasicShader: public Shader
 {
 public:
     const char* GetVertexShaderSource()
     {
-
+        return ReadFileContents("Shaders/3DBasicVS.glsl");
     }
 
     const char* GetFragmentShaderSource()
     {
-        
+        return ReadFileContents("Shaders/3DBasicFS.glsl");
     }
 };

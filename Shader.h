@@ -17,7 +17,8 @@ class Shader
 {
 protected:
     GLuint  mShaderProgramID = 0;
-    GLint   mVertexPos2DLoc = -1;
+    
+    const char* ReadFileContents(const char* path);
 public:
     Shader();
     ~Shader();
@@ -26,6 +27,6 @@ public:
     void Activate();
     void Deactivate();
 
-    const char* GetVertexShaderSource();
-    const char* GetFragmentShaderSource();
+    virtual const char* GetVertexShaderSource();
+    virtual const char* GetFragmentShaderSource();
 };

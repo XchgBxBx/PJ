@@ -24,7 +24,7 @@ public:
     Node();
     ~Node();
 
-    void LoadResources();
-    void Update();
-    void Render();
+    virtual void LoadResources();
+    virtual void Update();
+    virtual void Render();
 };

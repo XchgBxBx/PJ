@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <windows.h>
+#include <fstream>
+#include <vector>
 
 Shader::Shader()
 {
@@ -88,32 +90,50 @@ void Shader::LoadShader()
         exit(0);
     }
 
-    mVertexPos2DLoc = glGetAttribLocation(mShaderProgramID, "LVertexPos2D");
-    if (mVertexPos2DLoc == -1)
-    {
-        std::cout << "bad variable name" << std::endl;
-        exit(0);
-    }
+    // mVertexPos2DLoc = glGetAttribLocation(mShaderProgramID, "LVertexPos2D");
+    // if (mVertexPos2DLoc == -1)
+    // {
+    //     std::cout << "bad variable name" << std::endl;
+    //     exit(0);
+    // }
 }
 
 void Shader::Activate()
 {
     glUseProgram(mShaderProgramID);
-    glEnableVertexAttribArray(mVertexPos2DLoc);
+    glEnableVertexAttribArray(0);
 }
 
 void Shader::Deactivate()
 {
-    glDisableVertexAttribArray(mVertexPos2DLoc);
+    glDisableVertexAttribArray(0);
     glUseProgram(NULL);
+}
+
+const char* Shader::ReadFileContents(const char* path)
+{
+    std::ifstream file;
+    file.open(path);
+    std::vector<char> contents;
+
+    file.seekg(0, file.end);
+    size_t len = file.tellg();
+    file.seekg(0, file.beg);
+
+    contents.resize(len);
+    file.read(&contents[0], len);
+
+    file.close();
+
+    return contents.data();
 }
 
 const char* Shader::GetVertexShaderSource()
 {
-    return "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }";
+    return ReadFileContents("Shaders/2DBasicVS.glsl");
 }
 
 const char* Shader::GetFragmentShaderSource()
 {
-    return  "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 0.0, 1.0, 1.0 ); }";
+    return ReadFileContents("Shaders/2DBasicFS.glsl");
 }

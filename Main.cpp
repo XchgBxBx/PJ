@@ -126,7 +126,6 @@ int main(int argc, char **argv)
 
     TestScene scene;
     currentScene = &scene;
-    std::cout << "aqui?";
     currentScene->LoadResources();
 
     SDL_Event event;
