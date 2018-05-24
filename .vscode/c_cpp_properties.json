@@ -47,7 +47,9 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}/../ThreadCC-master/x86/include",
-                "${workspaceFolder}/3rd/SDL2/i686-w64-mingw32/include"
+                "${workspaceFolder}/3rd/SDL2/i686-w64-mingw32/include",
+                "${workspaceFolder}/3rd/GLEW/include",
+                "${workspaceFolder}/3rd/GLM"
             ],
             "defines": [
                 "_DEBUG",
@@ -59,7 +61,9 @@
                 "path": [
                     "${workspaceFolder}",
                     "${workspaceFolder}/../ThreadCC-master/x86/include",
-                    "${workspaceFolder}/3rd/SDL2/i686-w64-mingw32/include"
+                    "${workspaceFolder}/3rd/SDL2/i686-w64-mingw32/include",
+                    "${workspaceFolder}/3rd/GLEW/include",
+                    "${workspaceFolder}/3rd/GLM"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
@@ -68,5 +72,5 @@
             "cppStandard": "c++17"
         }
     ],
-    "version": 3
+    "version": 4
 }
