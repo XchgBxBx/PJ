@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _TEST_SCENE_HPP_
-#define _TEST_SCENE_HPP_
+#pragma once
 
 #include "../Scene.h"
 #include "../Shader.h"
@@ -41,6 +40,3 @@ public:
         mDot.Render();
     }
 };
-
-
-#endif //_TEST_SCENE_HPP_

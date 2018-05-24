@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _QUAD_HPP_
-#define _QUAD_HPP_
+#pragma once
 
 #include "../Node.h"
 
@@ -37,7 +36,3 @@ public:
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, 4 * sizeof(GLuint), indexData, GL_STATIC_DRAW);
     }
 };
-
-
-
-#endif //_QUAD_HPP_

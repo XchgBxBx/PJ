@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _NODE_H_
-#define _NODE_H_
+#pragma once
 
 // TODO: move headers to one single file
 #define GLEW_STATIC
@@ -29,5 +28,3 @@ public:
     void Update();
     void Render(GLuint programAttrib);
 };
-
-#endif //_NODE_H_

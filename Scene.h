@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#pragma once
 
 #include "Node.h"
 
@@ -20,5 +19,3 @@ public:
     virtual void Update();
     virtual void Render();
 };
-
-#endif //_GAME_H_

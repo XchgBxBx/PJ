@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _SHADER_H_
-#define _SHADER_H_
+#pragma once
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -26,5 +25,3 @@ public:
     void Deactivate();
     GLint GetAttrib();
 };
-
-#endif //_SHADER_H_

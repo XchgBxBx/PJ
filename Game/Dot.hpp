@@ -4,8 +4,7 @@
 // 2018-05-23
 //
 
-#ifndef _DOT_HPP_
-#define _DOT_HPP_
+#pragma once
 
 #include "../Node.h"
 
@@ -31,5 +30,3 @@ public:
         glDisableVertexAttribArray(0); // fixed pipeline
     }
 };
-
-#endif // _DOT_HPP_
