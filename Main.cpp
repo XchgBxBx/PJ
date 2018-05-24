@@ -4,7 +4,6 @@
 // 2018-05-07
 //
 
-
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
@@ -15,6 +14,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "Game/TestScene.h"
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -22,92 +23,8 @@ SDL_Window     *g_Window;
 SDL_GLContext   g_GLContext;
 bool            g_Running = false;
 
-GLuint  g_ShaderProgramID = 0;
-GLint   g_VertexPos2DLoc = -1;
+Scene *currentScene = 0;
 
-#include "Game/Quad.h"
-
-Quad quad;
-
-void InitShaders()
-{
-    std::cout << "initializing shaders" << std::endl;
-
-    g_ShaderProgramID = glCreateProgram();
-
-    ///
-    // VertexShader
-    ///
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const GLchar* vertexShaderSource[] =
-    {
-        "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
-    };
-
-    glShaderSource(vertexShader, 1, vertexShaderSource, NULL);
-
-    glCompileShader(vertexShader);
-
-    GLint vsCompileResult = GL_FALSE;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vsCompileResult);
-    if (vsCompileResult != GL_TRUE)
-    {
-        std::cout << "couldn't compile vertex shader" << std::endl;
-        exit(0);
-    }
-
-    // attach
-
-    glAttachShader(g_ShaderProgramID, vertexShader);
-
-
-    ///
-    // Fragment Shader
-    ///
-
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar* fragShaderSource[] =
-    {
-        "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 0.5, 0.5, 0.5, 1.0 ); }"
-    };
-
-    glShaderSource(fragShader, 1, fragShaderSource, NULL);
-
-    glCompileShader(fragShader);
-
-    GLint fsCompileResult = GL_FALSE;
-    glGetShaderiv(fragShader, GL_COMPILE_STATUS, &fsCompileResult);
-    if (fsCompileResult != GL_TRUE)
-    {
-        std::cout << "couldn't compile fragment shader" << std::endl;
-        exit(0);
-    }
-
-    // attach
-    glAttachShader(g_ShaderProgramID, fragShader);
-
-
-    ///
-    // Linking
-    ///
-
-    glLinkProgram(g_ShaderProgramID);
-    GLint linkingResult = GL_FALSE;
-    glGetShaderiv(g_ShaderProgramID, GL_LINK_STATUS, &linkingResult);
-    if (fsCompileResult != GL_TRUE)
-    {
-        std::cout << "couldn't link shader" << std::endl;
-        exit(0);
-    }
-
-    g_VertexPos2DLoc = glGetAttribLocation(g_ShaderProgramID, "LVertexPos2D");
-    if (g_VertexPos2DLoc == -1)
-    {
-        std::cout << "bad variable name" << std::endl;
-        exit(0);
-    }
-}
 
 // sdl, gl, window initialization
 void Initialize(std::string windowTitle)
@@ -154,8 +71,6 @@ void Initialize(std::string windowTitle)
         std::cout << "glew error\n";
         exit(0);
     }
-
-    InitShaders();
 }
 
 
@@ -193,33 +108,11 @@ void HandleInput(SDL_Event *event)
 }
 
 
-void LoadResources()
-{
-    //Initialize clear color
-    glClearColor(0.f, 0.f, 0.f, 1.f);
-
-    quad.LoadResources();
-}
-
-
 void Render()
 {
-    //glClearColor ( 0.7, 0.7, 0.7, 1.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
-    //Bind program
-    glUseProgram(g_ShaderProgramID);
-
-    //Enable vertex position
-    glEnableVertexAttribArray(g_VertexPos2DLoc);
-
-        quad.Render(g_VertexPos2DLoc);
-
-    //Disable vertex position
-    glDisableVertexAttribArray(g_VertexPos2DLoc);
-
-    //Unbind program
-    glUseProgram(NULL);
+    currentScene->Render();
 
     SDL_GL_SwapWindow(g_Window);
 }
@@ -231,7 +124,10 @@ int main(int argc, char **argv)
     // Initialize window, SDL, GL
     Initialize("Joguin");
 
-    LoadResources();
+    TestScene scene;
+    currentScene = &scene;
+    std::cout << "aqui?";
+    currentScene->LoadResources();
 
     SDL_Event event;
     g_Running = true;
@@ -243,6 +139,8 @@ int main(int argc, char **argv)
         {
             HandleInput(&event);
         }
+
+        currentScene->Update();
 
         Render();
     }
