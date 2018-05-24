@@ -30,10 +30,9 @@ void Shader::LoadShader()
     ///
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const GLchar* vertexShaderSource[] =
-    {
-        "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }"
-    };
+
+    const GLchar* vertexShaderSource[1];
+    vertexShaderSource[0] = GetVertexShaderSource();
 
     glShaderSource(vertexShader, 1, vertexShaderSource, NULL);
 
@@ -57,10 +56,8 @@ void Shader::LoadShader()
     ///
 
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar* fragShaderSource[] =
-    {
-        "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 0.0, 0.0, 1.0 ); }"
-    };
+    const GLchar* fragShaderSource[1];
+    fragShaderSource[0] = GetFragmentShaderSource();
 
     glShaderSource(fragShader, 1, fragShaderSource, NULL);
 
@@ -111,7 +108,12 @@ void Shader::Deactivate()
     glUseProgram(NULL);
 }
 
-GLint Shader::GetAttrib()
+const char* Shader::GetVertexShaderSource()
 {
-    return mVertexPos2DLoc;
+    return "#version 140\nin vec2 LVertexPos2D; void main() { gl_Position = vec4( LVertexPos2D.x, LVertexPos2D.y, 0, 1 ); }";
+}
+
+const char* Shader::GetFragmentShaderSource()
+{
+    return  "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 0.0, 1.0, 1.0 ); }";
 }

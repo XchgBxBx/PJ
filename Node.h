@@ -26,5 +26,5 @@ public:
 
     void LoadResources();
     void Update();
-    void Render(GLuint programAttrib);
+    void Render();
 };

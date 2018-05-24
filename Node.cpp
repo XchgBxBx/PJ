@@ -26,11 +26,11 @@ void Node::Update()
 
 }
 
-void Node::Render(GLuint programAttrib)
+void Node::Render()
 {
     //Set vertex data
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObj);
-    glVertexAttribPointer(programAttrib, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), NULL);
 
     //Set index data and render
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBufferObj);

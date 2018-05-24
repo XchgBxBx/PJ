@@ -11,6 +11,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <string>
+
 class Shader
 {
 protected:
@@ -23,5 +25,7 @@ public:
     void LoadShader();
     void Activate();
     void Deactivate();
-    GLint GetAttrib();
+
+    const char* GetVertexShaderSource();
+    const char* GetFragmentShaderSource();
 };

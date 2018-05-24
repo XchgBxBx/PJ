@@ -23,10 +23,8 @@ public:
 
     void Render()
     {
-        glEnableVertexAttribArray(0); // fixed pipeline
         glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObj);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glDrawArrays(GL_POINTS, 0, 1);
-        glDisableVertexAttribArray(0); // fixed pipeline
     }
 };
