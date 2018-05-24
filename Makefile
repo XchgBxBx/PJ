@@ -12,7 +12,8 @@ SOURCES= \
 
 INCLUDE_DIR= \
   -I "./3rd/SDL2/i686-w64-mingw32/include" \
-  -I "./3rd/GLEW/include"
+  -I "./3rd/GLEW/include" \
+  -I "./3rd/GLM"
 
 LIB_DIR= \
   -L "./3rd/SDL2/i686-w64-mingw32/lib" \
