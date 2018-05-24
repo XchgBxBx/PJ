@@ -59,7 +59,7 @@ void Shader::LoadShader()
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar* fragShaderSource[] =
     {
-        "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 0.5, 0.5, 0.5, 1.0 ); }"
+        "#version 140\nout vec4 LFragment; void main() { LFragment = vec4( 1.0, 0.0, 0.0, 1.0 ); }"
     };
 
     glShaderSource(fragShader, 1, fragShaderSource, NULL);

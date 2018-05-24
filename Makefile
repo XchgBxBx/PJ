@@ -3,10 +3,6 @@ SOURCES= \
   Shader.cpp \
   Node.cpp \
   Scene.cpp \
-  \
-  Game/Quad.cpp \
-  Game/TestScene.cpp \
-  \
   Main.cpp
 
 

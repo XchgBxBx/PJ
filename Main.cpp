@@ -14,7 +14,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "Game/TestScene.h"
+#include "Game/TestScene.hpp"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
