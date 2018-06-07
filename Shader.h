@@ -24,8 +24,11 @@ public:
     ~Shader();
 
     void LoadShader();
-    void Activate();
-    void Deactivate();
+    
+    virtual void PostLoading();
+
+    virtual void Activate();
+    virtual void Deactivate();
 
     virtual const char* GetVertexShaderSource();
     virtual const char* GetFragmentShaderSource();

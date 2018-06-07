@@ -10,6 +10,9 @@
 
 class BasicShader: public Shader
 {
+private:
+    GLint mScaleUniform;
+
 public:
     const char* GetVertexShaderSource()
     {
@@ -19,5 +22,16 @@ public:
     const char* GetFragmentShaderSource()
     {
         return ReadFileContents("Shaders/3DBasicFS.glsl");
+    }
+
+    void PostLoading()
+    {
+        mScaleUniform = glGetUniformLocation(mShaderProgramID, "gScale");
+    }
+
+    void Activate()
+    {
+        Shader::Activate();
+        glUniform1f(mScaleUniform, 0.25f);
     }
 };

@@ -23,7 +23,7 @@ Shader::~Shader()
 
 void Shader::LoadShader()
 {
-    std::cout << "initializing shaders" << std::endl;
+    std::cout << "loading shader" << std::endl;
 
     mShaderProgramID = glCreateProgram();
 
@@ -90,12 +90,19 @@ void Shader::LoadShader()
         exit(0);
     }
 
+    PostLoading();
+
     // mVertexPos2DLoc = glGetAttribLocation(mShaderProgramID, "LVertexPos2D");
     // if (mVertexPos2DLoc == -1)
     // {
     //     std::cout << "bad variable name" << std::endl;
     //     exit(0);
     // }
+}
+
+void Shader::PostLoading()
+{
+    
 }
 
 void Shader::Activate()
