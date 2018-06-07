@@ -90,7 +90,7 @@ void Shader::LoadShader()
         exit(0);
     }
 
-    PostLoading();
+    PostInitialization();
 
     // mVertexPos2DLoc = glGetAttribLocation(mShaderProgramID, "LVertexPos2D");
     // if (mVertexPos2DLoc == -1)
@@ -100,7 +100,7 @@ void Shader::LoadShader()
     // }
 }
 
-void Shader::PostLoading()
+void Shader::PostInitialization()
 {
     
 }

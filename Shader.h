@@ -25,7 +25,7 @@ public:
 
     void LoadShader();
     
-    virtual void PostLoading();
+    virtual void PostInitialization();
 
     virtual void Activate();
     virtual void Deactivate();

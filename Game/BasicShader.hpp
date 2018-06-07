@@ -24,7 +24,7 @@ public:
         return ReadFileContents("Shaders/3DBasicFS.glsl");
     }
 
-    void PostLoading()
+    void PostInitialization()
     {
         mScaleUniform = glGetUniformLocation(mShaderProgramID, "gScale");
     }
