@@ -10,9 +10,6 @@
 
 class BasicShader: public Shader
 {
-private:
-    GLint mScaleUniform;
-
 public:
     const char* GetVertexShaderSource()
     {
@@ -26,12 +23,11 @@ public:
 
     void PostInitialization()
     {
-        mScaleUniform = glGetUniformLocation(mShaderProgramID, "gScale");
+        uniforms["gWorld"] = glGetUniformLocation(mShaderProgramID, "gWorld");
     }
 
     void Activate()
     {
         Shader::Activate();
-        glUniform1f(mScaleUniform, 0.25f);
     }
 };

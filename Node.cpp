@@ -6,6 +6,8 @@
 
 #include "Node.h"
 
+#include <iostream>
+
 Node::Node()
 {
 
@@ -23,7 +25,14 @@ void Node::LoadResources()
 
 void Node::Update()
 {
+    // scale with IDENTITY
+    mModel = glm::scale(glm::mat4(1.0f), mScale);
 
+    mModel = glm::rotate(mModel, mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+    mModel = glm::rotate(mModel, mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+    mModel = glm::rotate(mModel, mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    mModel = glm::translate(mModel, mPosition);
 }
 
 void Node::Render()

@@ -12,6 +12,7 @@
 #include <GL/glu.h>
 
 #include <string>
+#include <map>
 
 class Shader
 {
@@ -19,9 +20,13 @@ protected:
     GLuint  mShaderProgramID = 0;
     
     const char* ReadFileContents(const char* path);
+
 public:
+
     Shader();
     ~Shader();
+
+    std::map<std::string, GLint> uniforms;
 
     void LoadShader();
     

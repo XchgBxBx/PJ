@@ -24,7 +24,8 @@ LIBS = \
   -lopengl32
 
 FLAGS = \
-  -fpermissive
+  -fpermissive \
+  -std=c++11
 
 all: build
 	a.exe

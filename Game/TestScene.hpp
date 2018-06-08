@@ -38,6 +38,11 @@ public:
         mTriangle.LoadResources();
     }
 
+    void Update()
+    {
+        mTriangle.Update();
+    }
+
     void Render()
     {
         // mShader.Activate();
@@ -52,6 +57,8 @@ public:
         // glDisableVertexAttribArray(0); // disable fixed pipeline
 
         m3DShader.Activate();
+            mTriangle.mRotation.z += 0.01;
+            glUniformMatrix4fv(m3DShader.uniforms["gWorld"], 1, GL_FALSE, &mTriangle.mModel[0][0]);
             mTriangle.Render();
         m3DShader.Deactivate();
     }
