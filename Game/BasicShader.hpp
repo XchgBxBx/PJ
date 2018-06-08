@@ -24,6 +24,7 @@ public:
     void PostInitialization()
     {
         uniforms["gWorld"] = glGetUniformLocation(mShaderProgramID, "gWorld");
+        uniforms["gProjView"] = glGetUniformLocation(mShaderProgramID, "gProjView");
     }
 
     void Activate()

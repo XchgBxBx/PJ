@@ -2,13 +2,14 @@
 
 layout (location = 0) in vec3 Position;
 
-uniform mat4    gWorld;
+uniform mat4 gWorld;
+uniform mat4 gProjView;
 
 out vec4 Color;
 
 void main()
 {
-    gl_Position = gWorld * vec4(
+    gl_Position = gProjView * gWorld * vec4(
         Position.x,
         Position.y,
         Position.z,
