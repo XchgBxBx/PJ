@@ -14,12 +14,6 @@ public:
 
     GLuint textureObj;
 
-    struct Vertex
-    {
-        glm::vec3 Position;
-        glm::vec2 UVCoord;
-    };
-
     void LoadResources()
     {
         // glm::vec3 vertices[3];
@@ -55,10 +49,6 @@ public:
         // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glFrontFace(GL_CW);
-        glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);
     }
 
     void Render()

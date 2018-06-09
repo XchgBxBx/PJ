@@ -15,9 +15,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+struct Vertex
+{
+    glm::vec3 Position;
+    glm::vec2 UVCoord;
+};
+
 class Node
 {
 public:
+
     GLuint  mVertexBufferObj = 0;
     GLuint  mIndexBufferObj = 0;
 

@@ -34,6 +34,10 @@ public:
         //Initialize clear color
         glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+
         //mShader.LoadShader();
         m3DShader.LoadShader();
 
