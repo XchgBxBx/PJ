@@ -33,7 +33,7 @@ public:
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
         // TEXTURE LOADING
-        SDL_Surface *surface = SDL_LoadBMP("textura.bmp");
+        SDL_Surface *surface = SDL_LoadBMP("Res/textura.bmp");
         std::cout << "Texture loaded with " << surface->w << " x " << surface->h << std::endl;
 
         // uint32_t pixels[] = {

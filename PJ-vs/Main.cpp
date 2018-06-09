@@ -32,7 +32,7 @@ void Initialize(std::string windowTitle)
     if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0)// | SDL_INIT_GAMECONTROLLER) < 0)
     {
         std::cout << "Could not init sdl: " << SDL_GetError() << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -48,7 +48,7 @@ void Initialize(std::string windowTitle)
     if(g_Window==NULL)
     {   
         std::cout << "Could not create window: " << SDL_GetError() << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     std::cout << "Window created!\n";
@@ -58,7 +58,7 @@ void Initialize(std::string windowTitle)
     if (g_GLContext == NULL)
     {
         std::cout << "cannot create GL Context." << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     // optional????
@@ -69,7 +69,7 @@ void Initialize(std::string windowTitle)
     if (glewError != GLEW_OK)
     {
         std::cout << "glew error\n";
-        exit(0);
+        system("pause");exit(0);
     }
 }
 

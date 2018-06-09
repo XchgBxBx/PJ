@@ -11,12 +11,12 @@
 class BasicShader: public Shader
 {
 public:
-    const char* GetVertexShaderSource()
+    std::string GetVertexShaderSource()
     {
         return ReadFileContents("Shaders/3DBasicVS.glsl");
     }
 
-    const char* GetFragmentShaderSource()
+    std::string GetFragmentShaderSource()
     {
         return ReadFileContents("Shaders/3DBasicFS.glsl");
     }

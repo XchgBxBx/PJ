@@ -32,10 +32,10 @@ void Shader::LoadShader()
     ///
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    const GLchar* vertexShaderSource[1];
-    vertexShaderSource[0] = GetVertexShaderSource();
+    std::string content = GetVertexShaderSource().c_str();
+    const char *bufferVertex = content.c_str();
 
-    glShaderSource(vertexShader, 1, vertexShaderSource, NULL);
+    glShaderSource(vertexShader, 1, &bufferVertex, NULL);
 
     glCompileShader(vertexShader);
 
@@ -44,7 +44,7 @@ void Shader::LoadShader()
     if (vsCompileResult != GL_TRUE)
     {
         std::cout << "couldn't compile vertex shader" << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     // attach
@@ -57,10 +57,10 @@ void Shader::LoadShader()
     ///
 
     GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar* fragShaderSource[1];
-    fragShaderSource[0] = GetFragmentShaderSource();
+    content = GetFragmentShaderSource().c_str();
+    const char *bufferFrag = content.c_str();
 
-    glShaderSource(fragShader, 1, fragShaderSource, NULL);
+    glShaderSource(fragShader, 1, &bufferFrag, NULL);
 
     glCompileShader(fragShader);
 
@@ -69,7 +69,7 @@ void Shader::LoadShader()
     if (fsCompileResult != GL_TRUE)
     {
         std::cout << "couldn't compile fragment shader" << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     // attach
@@ -87,7 +87,7 @@ void Shader::LoadShader()
     if (fsCompileResult != GL_TRUE)
     {
         std::cout << "couldn't link shader" << std::endl;
-        exit(0);
+        system("pause");exit(0);
     }
 
     PostInitialization();
@@ -96,7 +96,7 @@ void Shader::LoadShader()
     // if (mVertexPos2DLoc == -1)
     // {
     //     std::cout << "bad variable name" << std::endl;
-    //     exit(0);
+    //     system("pause");exit(0);
     // }
 }
 
@@ -115,7 +115,7 @@ void Shader::Deactivate()
     glUseProgram(NULL);
 }
 
-const char* Shader::ReadFileContents(const char* path)
+std::string Shader::ReadFileContents(const char* path)
 {
     std::ifstream file;
     file.open(path);
@@ -133,12 +133,12 @@ const char* Shader::ReadFileContents(const char* path)
     return contents.data();
 }
 
-const char* Shader::GetVertexShaderSource()
+std::string Shader::GetVertexShaderSource()
 {
     return ReadFileContents("Shaders/2DBasicVS.glsl");
 }
 
-const char* Shader::GetFragmentShaderSource()
+std::string Shader::GetFragmentShaderSource()
 {
     return ReadFileContents("Shaders/2DBasicFS.glsl");
 }

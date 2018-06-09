@@ -19,7 +19,7 @@ class Shader
 protected:
     GLuint  mShaderProgramID = 0;
     
-    const char* ReadFileContents(const char* path);
+    std::string ReadFileContents(const char* path);
 
 public:
 
@@ -35,6 +35,6 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-    virtual const char* GetVertexShaderSource();
-    virtual const char* GetFragmentShaderSource();
+    virtual std::string GetVertexShaderSource();
+    virtual std::string GetFragmentShaderSource();
 };
