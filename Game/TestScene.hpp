@@ -34,12 +34,13 @@ public:
         //Initialize clear color
         glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 
-        mShader.LoadShader();
+        //mShader.LoadShader();
         m3DShader.LoadShader();
 
-        mQuad.LoadResources();
-        mDot.LoadResources();
+        // mQuad.LoadResources();
+        // mDot.LoadResources();
         mTriangle.LoadResources();
+        std::cout << "error::" << gluErrorString(glGetError()) << std::endl;
 
         // projection-view computation
         // TODO: Aspect-Ratio is hardcoded:
@@ -70,6 +71,7 @@ public:
         m3DShader.Activate();
             glUniformMatrix4fv(m3DShader.uniforms["gWorld"], 1, GL_FALSE, &mTriangle.mModel[0][0]);
             glUniformMatrix4fv(m3DShader.uniforms["gProjView"], 1, GL_FALSE, &mProjView[0][0]);
+            glUniform1i(m3DShader.uniforms["gSampler"], 0);
             mTriangle.Render();
         m3DShader.Deactivate();
     }

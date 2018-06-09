@@ -25,6 +25,8 @@ public:
     {
         uniforms["gWorld"] = glGetUniformLocation(mShaderProgramID, "gWorld");
         uniforms["gProjView"] = glGetUniformLocation(mShaderProgramID, "gProjView");
+        uniforms["gSampler"] = glGetUniformLocation(mShaderProgramID, "gSampler");
+        // TODO: insert assert
     }
 
     void Activate()

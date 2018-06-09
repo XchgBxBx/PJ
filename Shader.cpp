@@ -32,7 +32,6 @@ void Shader::LoadShader()
     ///
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
     const GLchar* vertexShaderSource[1];
     vertexShaderSource[0] = GetVertexShaderSource();
 
@@ -84,6 +83,7 @@ void Shader::LoadShader()
     glLinkProgram(mShaderProgramID);
     GLint linkingResult = GL_FALSE;
     glGetShaderiv(mShaderProgramID, GL_LINK_STATUS, &linkingResult);
+    std::cout << "errorShader::" << gluErrorString(glGetError()) << std::endl;
     if (fsCompileResult != GL_TRUE)
     {
         std::cout << "couldn't link shader" << std::endl;
