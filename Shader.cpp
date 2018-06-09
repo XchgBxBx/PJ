@@ -108,12 +108,10 @@ void Shader::PostInitialization()
 void Shader::Activate()
 {
     glUseProgram(mShaderProgramID);
-    glEnableVertexAttribArray(0);
 }
 
 void Shader::Deactivate()
 {
-    glDisableVertexAttribArray(0);
     glUseProgram(NULL);
 }
 
