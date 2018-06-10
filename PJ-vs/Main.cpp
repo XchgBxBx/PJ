@@ -4,7 +4,7 @@
 // 2018-05-07
 //
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <iostream>
 #include <string>
 #include <windows.h>
@@ -42,7 +42,7 @@ void Initialize(std::string windowTitle)
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
     //g_Window = SDL_CreateWindow("SDL2 Window", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, 0); 
-    g_Window = SDL_CreateWindow(windowTitle.c_str(), 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT,
+    g_Window = SDL_CreateWindow(windowTitle.c_str(), 900, 100, SCREEN_WIDTH, SCREEN_HEIGHT,
         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
     if(g_Window==NULL)
@@ -110,7 +110,7 @@ void HandleInput(SDL_Event *event)
 
 void Render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     currentScene->Render();
 

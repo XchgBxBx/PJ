@@ -13,17 +13,15 @@
 #include "Dot.hpp"
 #include "Triangle.hpp"
 #include "BasicShader.hpp"
+#include "Animated.hpp"
 
 class TestScene: public Scene
 {
 private:
-    Shader  mShader;
-
     BasicShader m3DShader;
 
-    Quad        mQuad;
-    Dot         mDot;
     Triangle    mTriangle;
+    Animated    mAnimated;
 
     glm::mat4   mProjView;
     glm::vec3   mCameraPos = glm::vec3(0.0f, 0.0f, -5.0f);
@@ -34,17 +32,19 @@ public:
         //Initialize clear color
         glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 
+        glEnable(GL_DEPTH_TEST);
         glFrontFace(GL_CW);
-        glCullFace(GL_BACK);
+        glCullFace(GL_FRONT);
         glEnable(GL_CULL_FACE);
+        
 
-        //mShader.LoadShader();
         m3DShader.LoadShader();
 
-        // mQuad.LoadResources();
-        // mDot.LoadResources();
         mTriangle.LoadResources();
         std::cout << "error::" << gluErrorString(glGetError()) << std::endl;
+        mAnimated.LoadResources();
+        std::cout << "error::" << gluErrorString(glGetError()) << std::endl;
+
 
         // projection-view computation
         // TODO: Aspect-Ratio is hardcoded:
@@ -54,9 +54,12 @@ public:
 
     void Update()
     {
-        mTriangle.mRotation.y += 0.05f;
+        //mTriangle.mRotation.y += 0.05f;
 
         mTriangle.Update();
+        mAnimated.mRotation.y += 0.05f;
+        mAnimated.mPosition.z += 0.05f;
+        mAnimated.Update();
     }
 
     void Render()
@@ -73,10 +76,15 @@ public:
         // glDisableVertexAttribArray(0); // disable fixed pipeline
 
         m3DShader.Activate();
-            glUniformMatrix4fv(m3DShader.uniforms["gWorld"], 1, GL_FALSE, &mTriangle.mModel[0][0]);
+            /*glUniformMatrix4fv(m3DShader.uniforms["gWorld"], 1, GL_FALSE, &mTriangle.mModel[0][0]);
             glUniformMatrix4fv(m3DShader.uniforms["gProjView"], 1, GL_FALSE, &mProjView[0][0]);
             glUniform1i(m3DShader.uniforms["gSampler"], 0);
-            mTriangle.Render();
+            mTriangle.Render();*/
+
+            glUniformMatrix4fv(m3DShader.uniforms["gWorld"], 1, GL_FALSE, &mAnimated.mModel[0][0]);
+            glUniformMatrix4fv(m3DShader.uniforms["gProjView"], 1, GL_FALSE, &mProjView[0][0]);
+            glUniform1i(m3DShader.uniforms["gSampler"], 0);
+            mAnimated.Render();
         m3DShader.Deactivate();
     }
 };
