@@ -6,10 +6,6 @@
 
 #include "Node.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 
 Node::Node()
 {
@@ -49,6 +45,14 @@ void Node::Render()
     glDrawElements(GL_TRIANGLE_FAN, 4, GL_UNSIGNED_INT, NULL);
 }
 
+void Node::ConvertMatrix(const aiMatrix4x4& from, glm::mat4& to)
+{
+    to[0][0] = from.a1; to[0][1] = from.b1; to[0][2] = from.c1; to[0][3] = from.d1;
+    to[1][0] = from.a2; to[1][1] = from.b2; to[1][2] = from.c2; to[1][3] = from.d2;
+    to[2][0] = from.a3; to[2][1] = from.b3; to[2][2] = from.c3; to[2][3] = from.d3;
+    to[3][0] = from.a4; to[3][1] = from.b4; to[3][2] = from.c4; to[3][3] = from.d4;
+}
+
 void Node::LoadMesh(std::string filename)
 {
     Assimp::Importer importer;
@@ -59,6 +63,11 @@ void Node::LoadMesh(std::string filename)
         std::cout << "numMeshes: " << scene->mNumMeshes << std::endl;
         //meshes.resize(scene->mNumMeshes);
         std::cout << "numMaterials: " << scene->mNumMaterials << std::endl;
+
+        // ROOT Inverse
+        glm::mat4 globalInverse;
+        ConvertMatrix(scene->mRootNode->mTransformation, globalInverse);
+        globalInverse = glm::inverse(globalInverse);
 
         for (unsigned int i = 0; i < scene->mNumMeshes; i++)
         {
@@ -97,6 +106,12 @@ void Node::LoadMesh(std::string filename)
             Mesh mesh;
             mesh.LoadData(vertices, indices);
             meshes.push_back(mesh);
+
+            // load bone data NOW
+            if (aMesh->HasBones())
+            {
+                LoadBones(aMesh, meshes.size() - 1);
+            }
         }
     }
     else
@@ -105,4 +120,62 @@ void Node::LoadMesh(std::string filename)
         system("pause");
         exit(0);
     }
+}
+
+void Node::LoadBones(const aiMesh* mesh, unsigned int meshIndex)
+{
+    std::map<std::string, unsigned int> boneMapping;
+    unsigned int boneCount = 0;
+    std::vector<BoneInfo> boneInfos;
+    std::vector<BoneVertexData> bones;
+    bones.resize(mesh->mNumVertices);
+
+    for (unsigned int i = 0; i < mesh->mNumBones; i++)
+    {
+        unsigned int boneIndex = 0;
+        std::string boneName(mesh->mBones[i]->mName.data);
+
+        if (boneMapping.find(boneName) == boneMapping.end())
+        {
+            boneIndex = boneCount;
+            boneCount++;
+
+            BoneInfo info;
+            glm::mat4 offset;
+            ConvertMatrix(mesh->mBones[i]->mOffsetMatrix, offset);
+            info.BoneOffset = offset;
+            boneInfos.push_back(info);
+
+            boneMapping[boneName] = boneIndex;
+        }
+        else
+        {
+            boneIndex = boneMapping[boneName];
+        }
+
+        for (unsigned int w = 0; w < mesh->mBones[i]->mNumWeights; w++)
+        {
+            // TODO: figure out reference's base vertex(it's used for VAO??)
+            unsigned int vertexId = mesh->mBones[i]->mWeights[w].mVertexId;
+            float weight = mesh->mBones[i]->mWeights[w].mWeight;
+
+            // TODO: change that hardcoded number 3 vvvvvvv
+            for (unsigned int j = 0; j <= 3; j++)
+            {
+                if (bones[vertexId].Weights[j] == 0.0)
+                {
+                    bones[vertexId].BoneIds[j] = boneIndex;
+                    bones[vertexId].Weights[j] = weight;
+                    break;
+                }
+            }
+
+            // TODO:correct verification
+            /*std::cout << "MORE BONES THAN EXPECTED" << std::endl;
+            system("pause");
+            exit(0);*/
+        }
+    }
+
+    meshes[meshIndex].LoadBoneData(bones);
 }

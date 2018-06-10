@@ -18,6 +18,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 struct Vertex
 {
@@ -25,10 +30,24 @@ struct Vertex
     glm::vec2 UVCoord;
 };
 
+struct BoneVertexData
+{
+    glm::ivec3 BoneIds;
+    glm::vec3  Weights;
+};
+
+struct BoneInfo
+{
+    glm::mat4 BoneOffset;
+    glm::mat4 FinalTransform;
+};
+
 struct Mesh
 {
     GLuint vertexBuffer;
     GLuint indexBuffer;
+
+    GLuint boneBuffer;
 
     unsigned int numIndices;
 
@@ -45,6 +64,15 @@ struct Mesh
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * numIndices, &indices[0], GL_STATIC_DRAW);
 
         std::cout << "mesh loaded" << std::endl;
+    }
+
+    void LoadBoneData(const std::vector<BoneVertexData>& boneData)
+    {
+        glGenBuffers(1, &boneBuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, boneBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(BoneVertexData) * boneData.size(), &boneData[0], GL_STATIC_DRAW);
+
+        std::cout << "bone data loaded" << std::endl;
     }
 };
 
@@ -70,5 +98,7 @@ public:
     virtual void Update();
     virtual void Render();
 
+    void ConvertMatrix(const aiMatrix4x4& from, glm::mat4& to);
     void LoadMesh(std::string filename);
+    void LoadBones(const aiMesh* mesh, unsigned int meshIndex);
 };
